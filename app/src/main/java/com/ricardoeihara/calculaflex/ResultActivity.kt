@@ -12,7 +12,7 @@ class ResultActivity : AppCompatActivity() {
         setContentView(R.layout.activity_result)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
-        supportActionBar    ?.setDisplayShowHomeEnabled(true);
+        supportActionBar?.setDisplayShowHomeEnabled(true);
 
         if (intent.extras == null) {
             Toast.makeText(this, "Não foi possível realizar a operação", Toast.LENGTH_SHORT).show()
