@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import com.crashlytics.android.Crashlytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -37,6 +38,9 @@ class FormActivity : BaseActivity() {
         etEthanolAverage.addTextChangedListener(DecimalTextWatcher(etEthanolAverage, 1))
 
         btCalculate.setOnClickListener {
+/*            Crashlytics.log("Exemplo de mensagem de erro.")
+            Crashlytics.getInstance().crash()*/
+
             saveCarData()
             val proximatela = Intent(this@FormActivity, ResultActivity::class.java)
             proximatela.putExtra("GAS_PRICE", etGasPrice.text.toString().toDouble())
