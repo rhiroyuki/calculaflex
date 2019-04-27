@@ -9,7 +9,8 @@
             style="@style/container_master">
 
         <ImageView
-                style="@style/banner"/>
+                style="@style/banner"
+                android:id="@+id/ivBanner"/>
 
         <View style="@style/divider"/>
 

@@ -14,7 +14,9 @@ import com.google.firebase.database.ValueEventListener
 import com.ricardoeihara.calculaflex.model.CarData
 import com.ricardoeihara.calculaflex.utils.CalculaFlexTracker
 import com.ricardoeihara.calculaflex.utils.DatabaseUtil
+import com.ricardoeihara.calculaflex.utils.RemoteConfig
 import com.ricardoeihara.calculaflex.watchers.DecimalTextWatcher
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_form.*
 
 class FormActivity : BaseActivity() {
@@ -28,6 +30,8 @@ class FormActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form)
+
+        loadBanner()
 
         mAuth = FirebaseAuth.getInstance()
         userId = FirebaseAuth.getInstance().currentUser!!.uid
@@ -52,6 +56,13 @@ class FormActivity : BaseActivity() {
 
             startActivity(proximatela)
         }
+    }
+
+    private fun loadBanner() {
+        val loginBanner = RemoteConfig.getFirebaseRemoteConfig()
+            .getString("banner_image")
+
+        Picasso.get().load(loginBanner).into(ivBanner)
     }
 
     private fun saveCarData() {
