@@ -59,7 +59,7 @@ import kotlinx.android.synthetic.main.activity_login.*
     }
 }*/
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity() {
 
     private lateinit var mAuth: FirebaseAuth
 

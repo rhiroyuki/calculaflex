@@ -2,11 +2,18 @@ package com.ricardoeihara.calculaflex
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.ricardoeihara.calculaflex.utils.CalculaFlexTracker
+import com.ricardoeihara.calculaflex.utils.ScreenMap
 
-class BaseActivity : AppCompatActivity() {
+open class BaseActivity : AppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_base)
+    open fun getScreenName(): String {
+        return ScreenMap.getScreenNameBy(this)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        CalculaFlexTracker.trackScreen(this, getScreenName())
     }
 }
+

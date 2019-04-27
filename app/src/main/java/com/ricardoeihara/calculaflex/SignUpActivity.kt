@@ -9,7 +9,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.ricardoeihara.calculaflex.model.User
 import kotlinx.android.synthetic.main.activity_sign_up.*
 
-class SignUpActivity : AppCompatActivity() {
+class SignUpActivity : BaseActivity() {
 
     private lateinit var mAuth: FirebaseAuth
 

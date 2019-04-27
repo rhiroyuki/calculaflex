@@ -62,7 +62,7 @@ class SplashActivity : AppCompatActivity() {
 }
 */
 
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : BaseActivity() {
 
     private val TEMPO_AGUARDO_SPLASHSCREEN = 3500L
 
