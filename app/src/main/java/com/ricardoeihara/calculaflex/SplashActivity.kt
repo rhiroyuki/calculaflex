@@ -3,11 +3,15 @@ package com.ricardoeihara.calculaflex
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 
 import android.os.Bundle
 import android.os.Handler
+import android.support.v7.app.AlertDialog
 import android.view.animation.AnimationUtils
+import android.widget.Toast
+import com.ricardoeihara.calculaflex.utils.RemoteConfig
 import kotlinx.android.synthetic.main.activity_splash.*
 
 /*
@@ -66,21 +70,25 @@ class SplashActivity : BaseActivity() {
     private val TEMPO_AGUARDO_SPLASHSCREEN = 3500L
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        val preferences = getSharedPreferences("user_preferences", Context.MODE_PRIVATE)
-        val isFirstOpen = preferences.getBoolean("open_first", true)
+        RemoteConfig.remoteConfigFetch()
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    RemoteConfig.getFirebaseRemoteConfig().activateFetched()
+                    val minVersionApp = RemoteConfig.getFirebaseRemoteConfig()
+                        .getLong("min_version_app")
+                        .toInt()
+                    Toast.makeText(this, String.format("%s %s", minVersionApp.toString(), BuildConfig.VERSION_CODE), Toast.LENGTH_SHORT).show()
 
-        if (isFirstOpen) {
-            showLogin()
-        } else {
-
-            markAppAlreadyOpen(preferences)
-            showSplash()
-        }
+                    if (minVersionApp <= BuildConfig.VERSION_CODE)
+                        continueApp()
+                    else
+                        showAlertMinVersion()
+                } else
+                    continueApp()
+            }
     }
 
     private fun markAppAlreadyOpen(preferences: SharedPreferences) {
@@ -107,4 +115,43 @@ class SplashActivity : BaseActivity() {
             finish()
         }, TEMPO_AGUARDO_SPLASHSCREEN)
     }
+
+    private fun showAlertMinVersion() {
+        AlertDialog.Builder(this)
+            .setTitle("Ops")
+            .setMessage("Você esta utilizando uma versão muito antiga do aplicativo. Deseja atualizar?")
+
+            .setPositiveButton("Sim") { dialog, which ->
+                var intent: Intent
+                try {
+                    intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName"))
+                    startActivity(intent)
+                } catch (e: android.content.ActivityNotFoundException) {
+                    intent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
+                    )
+                    startActivity(intent)
+                }
+            }
+
+            .setNegativeButton("Não") { dialog, which ->
+                finish()
+            }
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .show()
+    }
+
+    private fun continueApp() {
+        val preferences = getSharedPreferences("user_preferences", Context.MODE_PRIVATE)
+        val isFirstOpen = preferences.getBoolean("open_first", true)
+
+        if (isFirstOpen) {
+            showLogin()
+        } else {
+            markAppAlreadyOpen(preferences)
+            showSplash()
+        }
+    }
+
 }
