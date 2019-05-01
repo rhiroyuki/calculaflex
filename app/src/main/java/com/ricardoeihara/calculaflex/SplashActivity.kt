@@ -80,7 +80,6 @@ class SplashActivity : BaseActivity() {
                     val minVersionApp = RemoteConfig.getFirebaseRemoteConfig()
                         .getLong("min_version_app")
                         .toInt()
-                    Toast.makeText(this, String.format("%s %s", minVersionApp.toString(), BuildConfig.VERSION_CODE), Toast.LENGTH_SHORT).show()
 
                     if (minVersionApp <= BuildConfig.VERSION_CODE)
                         continueApp()
